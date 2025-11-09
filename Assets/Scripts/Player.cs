@@ -1,0 +1,127 @@
+using UnityEngine;
+
+public class Player : MonoBehaviour, Daniable
+{
+    [SerializeField] private InputManagerSO inputManager;
+    private CharacterController controller;
+    [SerializeField] private Animator anim;
+
+    [Header("Movimiento")]
+    [SerializeField] private float velocidadMovimiento;
+    [SerializeField] private float factorGravedad;
+    [SerializeField] private Transform camara;
+    private Vector3 direccionMovimiento;
+    private Vector3 direccionInput;
+    private Vector3 velocidadVertical;
+
+    [Header("Sistema de combate")]
+    [SerializeField] private float vidaPlayer;
+    [SerializeField] private float distanciaDisparo;
+    [SerializeField] private float danioDisparo;
+
+
+    private void OnEnable()
+    {
+        inputManager.OnMover += Mover;
+        inputManager.OnDisparar += Disparar;
+        inputManager.OnRecargar += Recargar;
+        inputManager.OnInteractuar += Interactuar;
+    }
+
+    void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        controller = GetComponent<CharacterController>();
+        anim.SetBool("canShoot", true);
+        anim.SetBool("canReload", true);
+    }
+
+    void Update()
+    {
+        AplicarGravedad();
+        Moviendo();
+    }
+
+
+    private void Mover(Vector2 ctx)
+    {
+        direccionInput = new Vector3(ctx.x,0,ctx.y);
+        //Debug.Log(direccionInput);
+    }
+
+    private void Disparar()
+    {
+        Debug.Log("Disparando");
+        anim.SetTrigger("shooting");
+        if (Physics.Raycast(camara.position,camara.forward, out RaycastHit hitInfo, distanciaDisparo))
+        {
+            if (hitInfo.transform.TryGetComponent(out Daniable sistemaDanho))
+            {
+                if (!hitInfo.transform.CompareTag("Player"))
+                {
+                    sistemaDanho.RecibirDanio(danioDisparo);
+                }
+            }
+        }
+    }
+
+    private void Recargar()
+    {
+        Debug.Log("Recargando");
+        anim.SetTrigger("reloading");
+    }
+
+    private void Interactuar()
+    {
+        Debug.Log("Interactuando");
+    }
+
+    private void AplicarGravedad()
+    {
+        velocidadVertical.y += factorGravedad * Time.deltaTime;
+        controller.Move(velocidadVertical*Time.deltaTime);
+    }
+
+    private void Moviendo()
+    {
+        Vector3 direccionFrente = camara.forward;
+        direccionFrente.y = 0;
+        direccionFrente = direccionFrente.normalized;
+
+        Vector3 direccionDerecha = camara.right;
+        direccionDerecha.y = 0;
+        direccionDerecha = direccionDerecha.normalized;
+
+        direccionMovimiento = direccionFrente*direccionInput.z + direccionDerecha*direccionInput.x;
+        controller.Move(direccionMovimiento*velocidadMovimiento*Time.deltaTime);
+
+        RotarHaciaDestino(direccionFrente);
+
+        if (direccionInput.sqrMagnitude > 0)
+        {
+            anim.SetBool("walking", true);
+            
+        }
+        else
+        {
+            anim.SetBool("walking", false);
+        }
+    }
+
+    private void RotarHaciaDestino(Vector3 destino)
+    {
+        Quaternion rot = Quaternion.LookRotation(destino);
+        transform.rotation = rot;
+    }
+
+    public void RecibirDanio(float danio)
+    {
+        vidaPlayer -= danio;
+        if (vidaPlayer <= 0)
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
+
+}
