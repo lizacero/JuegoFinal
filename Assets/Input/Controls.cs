@@ -136,6 +136,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Esc"",
+                    ""type"": ""Button"",
+                    ""id"": ""46f42166-5329-4410-ad07-c79ccb4ec41c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -347,6 +356,17 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""Mover"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""90e39751-b9b0-4ad9-ac23-4732b89859ec"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Esc"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -360,6 +380,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Gameplay_Disparar = m_Gameplay.FindAction("Disparar", throwIfNotFound: true);
         m_Gameplay_Recargar = m_Gameplay.FindAction("Recargar", throwIfNotFound: true);
         m_Gameplay_Interactuar = m_Gameplay.FindAction("Interactuar", throwIfNotFound: true);
+        m_Gameplay_Esc = m_Gameplay.FindAction("Esc", throwIfNotFound: true);
     }
 
     ~@Controls()
@@ -445,6 +466,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Disparar;
     private readonly InputAction m_Gameplay_Recargar;
     private readonly InputAction m_Gameplay_Interactuar;
+    private readonly InputAction m_Gameplay_Esc;
     /// <summary>
     /// Provides access to input actions defined in input action map "Gameplay".
     /// </summary>
@@ -476,6 +498,10 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Gameplay/Interactuar".
         /// </summary>
         public InputAction @Interactuar => m_Wrapper.m_Gameplay_Interactuar;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/Esc".
+        /// </summary>
+        public InputAction @Esc => m_Wrapper.m_Gameplay_Esc;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -517,6 +543,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Interactuar.started += instance.OnInteractuar;
             @Interactuar.performed += instance.OnInteractuar;
             @Interactuar.canceled += instance.OnInteractuar;
+            @Esc.started += instance.OnEsc;
+            @Esc.performed += instance.OnEsc;
+            @Esc.canceled += instance.OnEsc;
         }
 
         /// <summary>
@@ -543,6 +572,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Interactuar.started -= instance.OnInteractuar;
             @Interactuar.performed -= instance.OnInteractuar;
             @Interactuar.canceled -= instance.OnInteractuar;
+            @Esc.started -= instance.OnEsc;
+            @Esc.performed -= instance.OnEsc;
+            @Esc.canceled -= instance.OnEsc;
         }
 
         /// <summary>
@@ -618,5 +650,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInteractuar(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Esc" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnEsc(InputAction.CallbackContext context);
     }
 }

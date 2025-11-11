@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
@@ -8,12 +10,17 @@ public class Enemy : MonoBehaviour, Daniable
     private NavMeshAgent agent;
     private Player target;
     private Animator anim;
+    [SerializeField] private Transform puntoDrop;
+    //private bool delay;
 
     [Header("Sistema de combate")]
     [SerializeField] private Transform puntoAtaque;
     [SerializeField] private float radioAtaque;
     [SerializeField] private float danioAtaque;
     private float vidaEnemigo = 20;
+    
+    [Header("Sistema de Game Over")]
+    [SerializeField] private MenuGameplay menuGameplay;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -21,6 +28,7 @@ public class Enemy : MonoBehaviour, Daniable
         anim = GetComponent<Animator>();
         target = FindAnyObjectByType<Player>();
         agent.SetDestination(target.transform.position);
+        //delay = true;
     }
 
     // Update is called once per frame
@@ -49,7 +57,7 @@ public class Enemy : MonoBehaviour, Daniable
         anim.SetBool("attacking", true);
     }
 
-    private void Atacar()  //Se llama en el evento de la animación
+    private void Atacar()  //Se llama en el evento de la animaciï¿½n
     {
         Collider[] colliderTocados = Physics.OverlapSphere(puntoAtaque.position, radioAtaque);
         foreach (Collider coll in colliderTocados)
@@ -61,7 +69,7 @@ public class Enemy : MonoBehaviour, Daniable
         }
     }
 
-    private void FinDeAtaque()  //Se llama en el evento de la animación
+    private void FinDeAtaque()  //Se llama en el evento de la animaciï¿½n
     {
         agent.isStopped = false;
         anim.SetBool("attacking", false);
@@ -73,9 +81,33 @@ public class Enemy : MonoBehaviour, Daniable
         Debug.Log(vidaEnemigo);
         if (vidaEnemigo <= 0)
         {
+            //elay =true;
             agent.isStopped = true;
+            Destroy(GetComponent<CapsuleCollider>());
             anim.SetTrigger("died");
-            //Destroy(this.gameObject);
+
+            if (GameManager.instance != null)
+            {
+                GameManager.instance.EnemigoEliminado();
+            }
+            
+            int random = UnityEngine.Random.Range(0, 4);
+            Instantiate(GameManager.instance.ObjetosDrop[random],puntoDrop.position,Quaternion.identity);
+            StartCoroutine(DelayMuerte());
+
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawSphere(puntoAtaque.position, radioAtaque);
+    }
+
+    private IEnumerator DelayMuerte()
+    {
+        Debug.Log("EntrÃ© a la corrutina");
+        yield return new WaitForSeconds(5f);
+        //delay = false;
+        Destroy(this.gameObject);
     }
 }

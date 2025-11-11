@@ -1,5 +1,6 @@
 using UnityEngine;
 
+
 public class Player : MonoBehaviour, Daniable
 {
     [SerializeField] private InputManagerSO inputManager;
@@ -19,6 +20,8 @@ public class Player : MonoBehaviour, Daniable
     [SerializeField] private float distanciaDisparo;
     [SerializeField] private float danioDisparo;
 
+    [Header("GameState")]
+    [SerializeField] private MenuGameplay menuGameplay;
 
     private void OnEnable()
     {
@@ -28,18 +31,36 @@ public class Player : MonoBehaviour, Daniable
         inputManager.OnInteractuar += Interactuar;
     }
 
+    private void OnDisable()
+    {
+        // Desuscribirse de los eventos antes de que se destruya el objeto
+        if (inputManager != null)
+        {
+            inputManager.OnMover -= Mover;
+            inputManager.OnDisparar -= Disparar;
+            inputManager.OnRecargar -= Recargar;
+            inputManager.OnInteractuar -= Interactuar;
+        }
+    }
+
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        
         controller = GetComponent<CharacterController>();
         anim.SetBool("canShoot", true);
         anim.SetBool("canReload", true);
+        
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.InicializarVida(vidaPlayer);
+        }
     }
 
     void Update()
     {
         AplicarGravedad();
         Moviendo();
+        
     }
 
 
@@ -53,7 +74,7 @@ public class Player : MonoBehaviour, Daniable
     {
         Debug.Log("Disparando");
         anim.SetTrigger("shooting");
-        if (Physics.Raycast(camara.position,camara.forward, out RaycastHit hitInfo, distanciaDisparo))
+        if (Physics.Raycast(camara.position, camara.forward, out RaycastHit hitInfo, distanciaDisparo))
         {
             if (hitInfo.transform.TryGetComponent(out Daniable sistemaDanho))
             {
@@ -64,6 +85,7 @@ public class Player : MonoBehaviour, Daniable
             }
         }
     }
+
 
     private void Recargar()
     {
@@ -106,6 +128,7 @@ public class Player : MonoBehaviour, Daniable
         {
             anim.SetBool("walking", false);
         }
+        Debug.DrawRay(camara.position, camara.forward * distanciaDisparo, Color.yellow);
     }
 
     private void RotarHaciaDestino(Vector3 destino)
@@ -116,10 +139,12 @@ public class Player : MonoBehaviour, Daniable
 
     public void RecibirDanio(float danio)
     {
+        
         vidaPlayer -= danio;
+        GameManager.instance.VidaPlayer = vidaPlayer;
         if (vidaPlayer <= 0)
-        {
-            Destroy(this.gameObject);
+        {         
+            Destroy(GetComponent<CharacterController>());
         }
     }
 

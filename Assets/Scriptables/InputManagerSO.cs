@@ -10,6 +10,7 @@ public class InputManagerSO : ScriptableObject
     public event Action OnDisparar;
     public event Action OnRecargar;
     public event Action OnInteractuar;
+    public event Action OnEsc;
 
     private void OnEnable()
     {
@@ -20,6 +21,12 @@ public class InputManagerSO : ScriptableObject
         misControles.Gameplay.Interactuar.started += Interactuar;
         misControles.Gameplay.Mover.performed += Mover;
         misControles.Gameplay.Mover.canceled += Mover;
+        misControles.Gameplay.Esc.started += Esc;
+    }
+
+    private void Esc(InputAction.CallbackContext context)
+    {
+        OnEsc?.Invoke();
     }
 
     private void Mover(InputAction.CallbackContext context)
