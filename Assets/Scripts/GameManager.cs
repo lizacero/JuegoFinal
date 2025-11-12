@@ -16,6 +16,10 @@ public class GameManager : MonoBehaviour
     [Header("Enemy")]
     [SerializeField] private GameObject enemy;
     [SerializeField] private Transform puntoSpawnEnemy;
+    [SerializeField] private float tiempoEntreSpawn = 5f;
+    private bool spawnContinuo = true;
+    private int maxEnemigos = 5;
+    private int enemigosVivos = 0;
     private int enemigosEliminados = 0;
     public int EnemigosEliminados { get => enemigosEliminados; set => enemigosEliminados = value; }
 
@@ -26,6 +30,7 @@ public class GameManager : MonoBehaviour
     [Header("Drops")]
     [SerializeField] private GameObject[] objetosDrop;
     public GameObject[] ObjetosDrop { get => objetosDrop; set => objetosDrop = value; }
+    private int item = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -48,7 +53,14 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        //StartCoroutine(SpawnEnemy());
 
+        //if (spawnContinuo)
+        //{
+        //    StartCoroutine(SpawnEnemyContinuo());
+        //}
+
+        StartCoroutine(SpawnContinuo());
     }
 
     // Update is called once per frame
@@ -60,6 +72,7 @@ public class GameManager : MonoBehaviour
         {
             menuGameplay.MostrarPanelLose();
         }
+
     }
 
     public void InicializarVida(float vidaInicial)
@@ -78,17 +91,44 @@ public class GameManager : MonoBehaviour
     public void EnemigoEliminado()
     {
         enemigosEliminados++;
+        enemigosVivos--;
         Debug.Log(enemigosEliminados);
 
         if (enemigosEliminados >= 10)
         {
-            menuGameplay.MostrarPanelWin();
+            //menuGameplay.MostrarPanelWin();
         }
     }
 
-    private IEnumerator SpawnEnemy()
+    private void SpawnearEnemigo()
     {
-        yield return new WaitForSeconds(3f);
-        Instantiate(enemy, puntoSpawnEnemy);
+        Instantiate(enemy, puntoSpawnEnemy.position, puntoSpawnEnemy.rotation);
+        enemigosVivos++;
+    }
+
+
+    private IEnumerator SpawnContinuo()
+    {
+        //yield return new WaitForSeconds(3f);
+        while (spawnContinuo)
+        {
+            yield return new WaitForSeconds(3f);
+            if (enemigosVivos < maxEnemigos)
+            {
+                SpawnearEnemigo();
+            }
+        }
+
+        yield return new WaitForSeconds(tiempoEntreSpawn);
+    }
+
+    public void ItemsRecolectados()
+    {
+        item++;
+        Debug.Log("item" + item);
+        if (item >= 10)
+        {
+            menuGameplay.MostrarPanelWin();
+        }
     }
 }

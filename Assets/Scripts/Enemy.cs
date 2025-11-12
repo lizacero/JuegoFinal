@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour, Daniable
     private NavMeshAgent agent;
     private Player target;
     private Animator anim;
+    private Rigidbody rb;
     [SerializeField] private Transform puntoDrop;
     //private bool delay;
 
@@ -21,25 +22,47 @@ public class Enemy : MonoBehaviour, Daniable
     
     [Header("Sistema de Game Over")]
     [SerializeField] private MenuGameplay menuGameplay;
+
+    [Header("Sistema de caída")]
+    private bool enSuelo = false;
+    private bool haIniciadoBusqueda = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>();
+
+        agent.enabled = false;
+
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+            rb.useGravity = true;
+        }
+
         target = FindAnyObjectByType<Player>();
-        agent.SetDestination(target.transform.position);
-        //delay = true;
+        //agent.SetDestination(target.transform.position);
     }
 
     // Update is called once per frame
     void Update()
     {
-        anim.SetBool("walking",true);
-        agent.SetDestination(target.transform.position);
-        if (agent.remainingDistance <= agent.stoppingDistance)
+        //anim.SetBool("walking",true);
+        //agent.SetDestination(target.transform.position);
+        //if (agent.remainingDistance <= agent.stoppingDistance)
+        //{
+        //    EnfocarOnjetivo();
+        //    LanzarAtaque();
+        //}
+
+        if (enSuelo && !haIniciadoBusqueda)
         {
-            EnfocarOnjetivo();
-            LanzarAtaque();
+            IniciarBusqueda();
+        }
+        else if (haIniciadoBusqueda)
+        {
+            PerseguirPlayer();
         }
     }
 
@@ -95,6 +118,51 @@ public class Enemy : MonoBehaviour, Daniable
             Instantiate(GameManager.instance.ObjetosDrop[random],puntoDrop.position,Quaternion.identity);
             StartCoroutine(DelayMuerte());
 
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Detectar cuando toca el suelo (puedes usar tag o layer)
+        if (!enSuelo && (collision.gameObject.layer == LayerMask.NameToLayer("Default") ||
+                         collision.gameObject.CompareTag("Ground")))
+        {
+            enSuelo = true;
+
+            if (rb != null)
+            {
+                rb.isKinematic = true;
+                rb.useGravity = false;
+                rb.linearVelocity = Vector3.zero;
+            }
+        }
+    }
+
+    private void IniciarBusqueda()
+    {
+        if (target == null)
+            target = FindAnyObjectByType<Player>();
+
+        agent.enabled = true;
+
+        if (agent.isOnNavMesh && target != null)
+        {
+            agent.SetDestination(target.transform.position);
+            haIniciadoBusqueda = true;
+        }
+    }
+
+    private void PerseguirPlayer()
+    {
+        if (target == null || !agent.enabled) return;
+
+        anim.SetBool("walking", true);
+        agent.SetDestination(target.transform.position);
+
+        if (agent.remainingDistance <= agent.stoppingDistance)
+        {
+            EnfocarOnjetivo();
+            LanzarAtaque();
         }
     }
 

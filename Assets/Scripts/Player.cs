@@ -148,5 +148,16 @@ public class Player : MonoBehaviour, Daniable
         }
     }
 
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.CompareTag("Item1"))
+        {
+            //item++;
+            GameManager.instance.ItemsRecolectados();
+            Destroy(hit.gameObject);
+            
+        }
+    }
+
 
 }

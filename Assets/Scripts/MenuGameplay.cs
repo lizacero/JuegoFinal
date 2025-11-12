@@ -12,6 +12,7 @@ public class MenuGameplay : MonoBehaviour
 
     [Header("Panel pausa")]
     [SerializeField] private GameObject panelPausa;
+    private bool pausado = false;
 
     private void OnEnable()
     {
@@ -40,10 +41,22 @@ public class MenuGameplay : MonoBehaviour
     {
         if (panelPausa != null)
         {
-            panelPausa.SetActive(true);
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            Time.timeScale = 0;
+            if (pausado == false)
+            {
+                panelPausa.SetActive(true);
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+                Time.timeScale = 0;
+                pausado = true;
+            }
+            else
+            {
+                panelPausa.SetActive(false);
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                Time.timeScale = 1;
+                pausado = false;
+            }
         }
     }
 
@@ -93,4 +106,11 @@ public class MenuGameplay : MonoBehaviour
         Cursor.visible = false;
         Time.timeScale = 1;
     }
+
+    public void Creditos()
+    {
+        SceneManager.LoadScene(2);
+        Time.timeScale = 1;
+    }
+
 }

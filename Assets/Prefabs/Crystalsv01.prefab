@@ -493,9 +493,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6111195218574094049}
   - component: {fileID: 4911222625491985419}
+  - component: {fileID: 1677185171535256049}
   m_Layer: 0
   m_Name: Crystalsv01
-  m_TagString: Untagged
+  m_TagString: Item1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -544,6 +545,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.54, y: 5.06, z: 4}
   m_Center: {x: -0.07, y: 1.59, z: 0.36}
+--- !u!114 &1677185171535256049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4902044423147256027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0be811d4a014f4e4a8b1d405986bdc58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Destruir
 --- !u!1 &5630133130403423090
 GameObject:
   m_ObjectHideFlags: 0
