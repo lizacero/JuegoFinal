@@ -12,7 +12,7 @@ public class Interactuable : MonoBehaviour
 
     private bool enRango = false;
     private float distancia;
-    private float distanciaInteraccion = 3f;
+    [SerializeField] private float distanciaInteraccion = 8f;
 
     private void OnEnable()
     {
