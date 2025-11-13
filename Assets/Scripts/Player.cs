@@ -29,7 +29,6 @@ public class Player : MonoBehaviour, Daniable
         inputManager.OnMover += Mover;
         inputManager.OnDisparar += Disparar;
         inputManager.OnRecargar += Recargar;
-        inputManager.OnInteractuar += Interactuar;
     }
 
     private void OnDisable()
@@ -40,7 +39,6 @@ public class Player : MonoBehaviour, Daniable
             inputManager.OnMover -= Mover;
             inputManager.OnDisparar -= Disparar;
             inputManager.OnRecargar -= Recargar;
-            inputManager.OnInteractuar -= Interactuar;
         }
     }
 
@@ -95,10 +93,6 @@ public class Player : MonoBehaviour, Daniable
         anim.SetTrigger("reloading");
     }
 
-    private void Interactuar()
-    {
-        Debug.Log("Interactuando");
-    }
 
     private void AplicarGravedad()
     {

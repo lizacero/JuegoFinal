@@ -40,11 +40,13 @@ public class Interactuable : MonoBehaviour
         {
             GameManager.instance.PanelInteraccion.SetActive(true);
             Debug.Log("dentro de la distancia");
+            enRango = true;
         }
         else
         {
             GameManager.instance.PanelInteraccion.SetActive(false);
             Debug.Log("fuera de la distancia");
+            enRango = false;
         }
     }
     private void Interactuar()
