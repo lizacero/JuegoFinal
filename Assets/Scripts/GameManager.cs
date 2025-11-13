@@ -30,7 +30,21 @@ public class GameManager : MonoBehaviour
     [Header("Drops")]
     [SerializeField] private GameObject[] objetosDrop;
     public GameObject[] ObjetosDrop { get => objetosDrop; set => objetosDrop = value; }
-    private int item = 0;
+
+    private int[] items = new int[5];
+    public int[] Items { get => items; set => items = value; }
+
+    [Header("Interacción")]
+    [SerializeField] private GameObject panelInteraccion;
+    public GameObject PanelInteraccion { get => panelInteraccion; set => panelInteraccion = value; }
+    private bool activar = false;
+    private bool ritualActivo = false;
+    public bool RitualActivo { get => ritualActivo; set => ritualActivo = value; }
+
+    //[SerializeField] private GameObject altar;
+    //private float distancia;
+    //private float distanciaInteraccion = 3f;
+    //private bool enRango = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -72,6 +86,7 @@ public class GameManager : MonoBehaviour
         {
             menuGameplay.MostrarPanelLose();
         }
+        ObjetosRecolectados();
 
     }
 
@@ -92,7 +107,7 @@ public class GameManager : MonoBehaviour
     {
         enemigosEliminados++;
         enemigosVivos--;
-        Debug.Log(enemigosEliminados);
+        //Debug.Log(enemigosEliminados);
 
         if (enemigosEliminados >= 10)
         {
@@ -122,13 +137,30 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(tiempoEntreSpawn);
     }
 
-    public void ItemsRecolectados()
+    private void ObjetosRecolectados()
     {
-        item++;
-        Debug.Log("item" + item);
-        if (item >= 10)
+        //Debug.Log(items[0] + "," + items[1] + "," + items[2] + "," + items[3] + "," + items[4]);
+        if (items[0] >= 1 && items[1] >= 1 && items[2] >= 1 && items[3] >= 1 && items[4] >= 1)
         {
+            Debug.Log("Se han recolectado todos los cristales");
+            activar = true;
+            
+        }
+    }
+
+    public IEnumerator ActivarRitual()
+    {
+        if (activar == true)
+        {
+            Debug.Log("interactuando con el altar");
+            ritualActivo = true;
+            //interactúa con la piedra
+            yield return new WaitForSeconds(10f);
             menuGameplay.MostrarPanelWin();
+        }
+        else
+        {
+            Debug.Log("Falta recolectar los cristales");
         }
     }
 }

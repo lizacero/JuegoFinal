@@ -636,7 +636,7 @@ GameObject:
   - component: {fileID: 6609548108138967156}
   m_Layer: 0
   m_Name: Crystalsv04
-  m_TagString: Item1
+  m_TagString: Item4
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

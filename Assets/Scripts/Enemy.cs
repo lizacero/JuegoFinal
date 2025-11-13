@@ -101,7 +101,6 @@ public class Enemy : MonoBehaviour, Daniable
     public void RecibirDanio(float danio)
     {
         vidaEnemigo -= danio;
-        Debug.Log(vidaEnemigo);
         if (vidaEnemigo <= 0)
         {
             //elay =true;
@@ -114,7 +113,7 @@ public class Enemy : MonoBehaviour, Daniable
                 GameManager.instance.EnemigoEliminado();
             }
             
-            int random = UnityEngine.Random.Range(0, 4);
+            int random = UnityEngine.Random.Range(0, 5);
             Instantiate(GameManager.instance.ObjetosDrop[random],puntoDrop.position,Quaternion.identity);
             StartCoroutine(DelayMuerte());
 
@@ -133,7 +132,6 @@ public class Enemy : MonoBehaviour, Daniable
             {
                 rb.isKinematic = true;
                 rb.useGravity = false;
-                rb.linearVelocity = Vector3.zero;
             }
         }
     }

@@ -152,11 +152,30 @@ public class Player : MonoBehaviour, Daniable
     {
         if (hit.gameObject.CompareTag("Item1"))
         {
-            //item++;
-            GameManager.instance.ItemsRecolectados();
+            GameManager.instance.Items[0]++;
             Destroy(hit.gameObject);
-            
         }
+        else if (hit.gameObject.CompareTag("Item2"))
+        {
+            GameManager.instance.Items[1]++;
+            Destroy(hit.gameObject);
+        }
+        else if (hit.gameObject.CompareTag("Item3"))
+        {
+            GameManager.instance.Items[2]++;
+            Destroy(hit.gameObject);
+        }
+        else if (hit.gameObject.CompareTag("Item4"))
+        {
+            GameManager.instance.Items[3]++;
+            Destroy(hit.gameObject);
+        }
+        else if (hit.gameObject.CompareTag("Item5"))
+        {
+            GameManager.instance.Items[4]++;
+            Destroy(hit.gameObject);
+        }
+
     }
 
 
