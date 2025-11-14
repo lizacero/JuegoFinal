@@ -46,6 +46,7 @@ public class MenuGameplay : MonoBehaviour
                 panelPausa.SetActive(true);
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
+                AudioListener.pause = true;
                 Time.timeScale = 0;
                 pausado = true;
             }
@@ -54,6 +55,7 @@ public class MenuGameplay : MonoBehaviour
                 panelPausa.SetActive(false);
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
+                AudioListener.pause = false;
                 Time.timeScale = 1;
                 pausado = false;
             }
@@ -67,6 +69,7 @@ public class MenuGameplay : MonoBehaviour
             panelWin.SetActive(true);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+            AudioListener.pause = true;
             Time.timeScale = 0;
         }
     }
@@ -78,6 +81,7 @@ public class MenuGameplay : MonoBehaviour
             panelLose.SetActive(true);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+            AudioListener.pause = true;
             Time.timeScale = 0;
         }
     }
@@ -85,10 +89,12 @@ public class MenuGameplay : MonoBehaviour
     public void Volver()
     {
         SceneManager.LoadScene(0);
+        AudioListener.pause = false;
     }
 
     public void Reintentar()
     {
+        AudioListener.pause = false;
         SceneManager.LoadScene(1);
         Time.timeScale = 1;
     }
@@ -104,12 +110,14 @@ public class MenuGameplay : MonoBehaviour
         panelPausa.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        AudioListener.pause = false;
         Time.timeScale = 1;
     }
 
     public void Creditos()
     {
         SceneManager.LoadScene(2);
+        AudioListener.pause = false;
         Time.timeScale = 1;
     }
 

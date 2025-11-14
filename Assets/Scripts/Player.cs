@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 
 public class Player : MonoBehaviour, Daniable
@@ -24,6 +25,8 @@ public class Player : MonoBehaviour, Daniable
 
     [Header("GameState")]
     [SerializeField] private MenuGameplay menuGameplay;
+
+    private bool mouseSobreUI = false;
 
     private void OnEnable()
     {
@@ -59,6 +62,12 @@ public class Player : MonoBehaviour, Daniable
 
     void Update()
     {
+        // Verificar el estado de UI en Update() (se ejecuta antes de los callbacks)
+        if (EventSystem.current != null)
+        {
+            mouseSobreUI = EventSystem.current.IsPointerOverGameObject();
+        }
+
         AplicarGravedad();
         Moviendo();
         
@@ -73,6 +82,17 @@ public class Player : MonoBehaviour, Daniable
 
     private void Disparar()
     {
+        if (mouseSobreUI)
+        {
+            return; // Si está sobre UI, no disparar
+        }
+
+        if (Time.timeScale == 0)
+        {
+            return; // Si está pausado, no disparar
+        }
+
+
         Debug.Log("Disparando");
         anim.SetTrigger("shooting");
         particulas.Play();
@@ -142,7 +162,8 @@ public class Player : MonoBehaviour, Daniable
         vidaPlayer -= danio;
         GameManager.instance.VidaPlayer = vidaPlayer;
         if (vidaPlayer <= 0)
-        {         
+        {   
+            GameManager.instance.PanelObjetivo.SetActive(false);
             Destroy(GetComponent<CharacterController>());
         }
     }

@@ -18,9 +18,12 @@ public class Enemy : MonoBehaviour, Daniable
     [SerializeField] private Transform puntoAtaque;
     [SerializeField] private float radioAtaque;
     [SerializeField] private float danioAtaque;
-    private float vidaEnemigo = 20;
-    private AudioSource ataque;
-    
+    private float vidaEnemigo = 60;
+    //private AudioSource ataque;
+    [SerializeField] private AudioSource respiracion;
+    [SerializeField] private AudioSource ataque;
+    private float distanciaReal;
+
 
     [Header("Sistema de caída")]
     private bool enSuelo = false;
@@ -31,7 +34,7 @@ public class Enemy : MonoBehaviour, Daniable
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-        ataque = GetComponent<AudioSource>();
+        //ataque = GetComponent<AudioSource>();
 
         agent.enabled = false;
 
@@ -56,6 +59,7 @@ public class Enemy : MonoBehaviour, Daniable
         {
             PerseguirPlayer();
         }
+        Debug.Log("Distancia real" + distanciaReal);
     }
 
     private void IniciarBusqueda()
@@ -79,7 +83,17 @@ public class Enemy : MonoBehaviour, Daniable
         anim.SetBool("walking", true);
         agent.SetDestination(target.transform.position);
 
-        if (agent.remainingDistance <= agent.stoppingDistance)
+        // Verificar que el agente tenga un path válido y no esté calculando uno nuevo
+        if (agent.pathPending)
+            return; // Esperar a que termine de calcular el path
+
+        // Verificar que tenga un path válido
+        if (!agent.hasPath)
+            return;
+
+        distanciaReal = Vector3.Distance(transform.position, target.transform.position);
+
+        if (distanciaReal <= 2.5f)
         {
             EnfocarOnjetivo();
             LanzarAtaque();

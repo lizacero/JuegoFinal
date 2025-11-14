@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform puntoSpawnEnemy;
     [SerializeField] private float tiempoEntreSpawn = 5f;
     private bool spawnContinuo = true;
-    private int maxEnemigos = 5;
+    private int maxEnemigos = 20;
     private int enemigosVivos = 0;
     private int enemigosEliminados = 0;
     public int EnemigosEliminados { get => enemigosEliminados; set => enemigosEliminados = value; }
@@ -38,8 +38,10 @@ public class GameManager : MonoBehaviour
     [Header("Interacción")]
     [SerializeField] private GameObject panelInteraccion;
     public GameObject PanelInteraccion { get => panelInteraccion; set => panelInteraccion = value; }
+
     [SerializeField] private GameObject panelObjetivo;
     public GameObject PanelObjetivo { get => panelObjetivo; set => panelObjetivo = value; }
+
     [SerializeField] private TextMeshProUGUI textoObjetivo;
     private bool activar = false;
     private bool ritualActivo = false;
@@ -112,17 +114,16 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator SpawnContinuo()
     {
-        //yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(3f);
         while (spawnContinuo)
         {
-            yield return new WaitForSeconds(3f);
             if (enemigosVivos < maxEnemigos)
             {
                 SpawnearEnemigo();
             }
+            yield return new WaitForSeconds(tiempoEntreSpawn);
         }
 
-        yield return new WaitForSeconds(tiempoEntreSpawn);
     }
 
     private void ObjetosRecolectados()

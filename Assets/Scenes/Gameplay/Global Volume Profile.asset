@@ -24,7 +24,7 @@ MonoBehaviour:
     m_Value: 0.046
   clamp:
     m_OverrideState: 0
-    m_Value: 0.05
+    m_Value: 0.187
 --- !u!114 &-7279467798999913907
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -40,7 +40,7 @@ MonoBehaviour:
   active: 1
   intensity:
     m_OverrideState: 1
-    m_Value: 0.019
+    m_Value: 0.158
 --- !u!114 &-5097089148872278558
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -65,7 +65,7 @@ MonoBehaviour:
     m_Value: 0.18
   scatter:
     m_OverrideState: 0
-    m_Value: 0.7
+    m_Value: 0.348
   clamp:
     m_OverrideState: 0
     m_Value: 65472
@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01700fd266d6914ababb731e09af2eb, type: 3}
   m_Name: DepthOfField
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.DepthOfField
-  active: 1
+  active: 0
   mode:
     m_OverrideState: 1
     m_Value: 2
@@ -118,13 +118,13 @@ MonoBehaviour:
     m_Value: 0
   focusDistance:
     m_OverrideState: 1
-    m_Value: 2.5
+    m_Value: 1.92
   aperture:
-    m_OverrideState: 0
-    m_Value: 5.6
-  focalLength:
     m_OverrideState: 1
-    m_Value: 25
+    m_Value: 7.6
+  focalLength:
+    m_OverrideState: 0
+    m_Value: 1
   bladeCount:
     m_OverrideState: 0
     m_Value: 5
@@ -155,10 +155,10 @@ MonoBehaviour:
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.2
+    m_Value: 0.269
   smoothness:
     m_OverrideState: 1
-    m_Value: 0.4
+    m_Value: 1
   rounded:
     m_OverrideState: 0
     m_Value: 0
@@ -183,6 +183,7 @@ MonoBehaviour:
   - {fileID: -7605868135544713440}
   - {fileID: -7279467798999913907}
   - {fileID: 3220073796021607219}
+  - {fileID: 6089479914338333757}
 --- !u!114 &3220073796021607219
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -217,6 +218,34 @@ MonoBehaviour:
   highlightsEnd:
     m_OverrideState: 0
     m_Value: 1
+--- !u!114 &6089479914338333757
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66f335fb1ffd8684294ad653bf1c7564, type: 3}
+  m_Name: ColorAdjustments
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.ColorAdjustments
+  active: 1
+  postExposure:
+    m_OverrideState: 0
+    m_Value: 0
+  contrast:
+    m_OverrideState: 0
+    m_Value: 0
+  colorFilter:
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+  hueShift:
+    m_OverrideState: 0
+    m_Value: 0
+  saturation:
+    m_OverrideState: 0
+    m_Value: 0
 --- !u!114 &8107493230437249915
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -231,11 +260,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.FilmGrain
   active: 1
   type:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0.5
+    m_Value: 1
   response:
     m_OverrideState: 0
     m_Value: 0.8
