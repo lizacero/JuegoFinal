@@ -20,6 +20,7 @@ public class Player : MonoBehaviour, Daniable
     [SerializeField] private float distanciaDisparo;
     [SerializeField] private float danioDisparo;
     [SerializeField] private ParticleSystem particulas;
+    private AudioSource sonidoDisparo;
 
     [Header("GameState")]
     [SerializeField] private MenuGameplay menuGameplay;
@@ -46,6 +47,7 @@ public class Player : MonoBehaviour, Daniable
     {
         
         controller = GetComponent<CharacterController>();
+        sonidoDisparo = GetComponent<AudioSource>();
         anim.SetBool("canShoot", true);
         anim.SetBool("canReload", true);
         
@@ -74,7 +76,8 @@ public class Player : MonoBehaviour, Daniable
         Debug.Log("Disparando");
         anim.SetTrigger("shooting");
         particulas.Play();
-        if (Physics.Raycast(camara.position, camara.forward, out RaycastHit hitInfo, distanciaDisparo))
+        sonidoDisparo.Play();
+;        if (Physics.Raycast(camara.position, camara.forward, out RaycastHit hitInfo, distanciaDisparo))
         {
             if (hitInfo.transform.TryGetComponent(out Daniable sistemaDanho))
             {

@@ -20,8 +20,6 @@ public class Enemy : MonoBehaviour, Daniable
     [SerializeField] private float danioAtaque;
     private float vidaEnemigo = 20;
     
-    [Header("Sistema de Game Over")]
-    [SerializeField] private MenuGameplay menuGameplay;
 
     [Header("Sistema de caída")]
     private bool enSuelo = false;
@@ -42,19 +40,11 @@ public class Enemy : MonoBehaviour, Daniable
         }
 
         target = FindAnyObjectByType<Player>();
-        //agent.SetDestination(target.transform.position);
     }
 
     // Update is called once per frame
     void Update()
     {
-        //anim.SetBool("walking",true);
-        //agent.SetDestination(target.transform.position);
-        //if (agent.remainingDistance <= agent.stoppingDistance)
-        //{
-        //    EnfocarOnjetivo();
-        //    LanzarAtaque();
-        //}
 
         if (enSuelo && !haIniciadoBusqueda)
         {
@@ -63,76 +53,6 @@ public class Enemy : MonoBehaviour, Daniable
         else if (haIniciadoBusqueda)
         {
             PerseguirPlayer();
-        }
-    }
-
-    private void EnfocarOnjetivo()
-    {
-        Vector3 direccionAObjetivo = (target.transform.position - transform.position).normalized;
-        direccionAObjetivo.y = 0;
-        Quaternion rotacionAObjetivo = Quaternion.LookRotation(direccionAObjetivo);
-        transform.rotation = rotacionAObjetivo;
-    }
-
-    private void LanzarAtaque()
-    {
-        agent.isStopped = true;
-        anim.SetBool("attacking", true);
-    }
-
-    private void Atacar()  //Se llama en el evento de la animaci�n
-    {
-        Collider[] colliderTocados = Physics.OverlapSphere(puntoAtaque.position, radioAtaque);
-        foreach (Collider coll in colliderTocados)
-        {
-            if (coll.TryGetComponent(out Daniable danhable))
-            {
-                danhable.RecibirDanio(danioAtaque);
-            }
-        }
-    }
-
-    private void FinDeAtaque()  //Se llama en el evento de la animaci�n
-    {
-        agent.isStopped = false;
-        anim.SetBool("attacking", false);
-    }
-
-    public void RecibirDanio(float danio)
-    {
-        vidaEnemigo -= danio;
-        if (vidaEnemigo <= 0)
-        {
-            //elay =true;
-            agent.isStopped = true;
-            Destroy(GetComponent<CapsuleCollider>());
-            anim.SetTrigger("died");
-
-            if (GameManager.instance != null)
-            {
-                GameManager.instance.EnemigoEliminado();
-            }
-            
-            int random = UnityEngine.Random.Range(0, 5);
-            Instantiate(GameManager.instance.ObjetosDrop[random],puntoDrop.position,Quaternion.identity);
-            StartCoroutine(DelayMuerte());
-
-        }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        // Detectar cuando toca el suelo (puedes usar tag o layer)
-        if (!enSuelo && (collision.gameObject.layer == LayerMask.NameToLayer("Default") ||
-                         collision.gameObject.CompareTag("Ground")))
-        {
-            enSuelo = true;
-
-            if (rb != null)
-            {
-                rb.isKinematic = true;
-                rb.useGravity = false;
-            }
         }
     }
 
@@ -164,6 +84,78 @@ public class Enemy : MonoBehaviour, Daniable
         }
     }
 
+    private void EnfocarOnjetivo()
+    {
+        Vector3 direccionAObjetivo = (target.transform.position - transform.position).normalized;
+        direccionAObjetivo.y = 0;
+        Quaternion rotacionAObjetivo = Quaternion.LookRotation(direccionAObjetivo);
+        transform.rotation = rotacionAObjetivo;
+    }
+
+    private void LanzarAtaque()
+    {
+        agent.isStopped = true;
+        anim.SetBool("attacking", true);
+    }
+
+    private void Atacar()  //Se llama en el evento de la animación
+    {
+        Collider[] colliderTocados = Physics.OverlapSphere(puntoAtaque.position, radioAtaque);
+        foreach (Collider coll in colliderTocados)
+        {
+            if (coll.CompareTag("Player"))
+            {
+                if (coll.TryGetComponent(out Daniable danhable))
+                {
+                    danhable.RecibirDanio(danioAtaque);
+                }
+            }
+        }
+    }
+
+    private void FinDeAtaque()  //Se llama en el evento de la animación
+    {
+        agent.isStopped = false;
+        anim.SetBool("attacking", false);
+    }
+
+    public void RecibirDanio(float danio)
+    {
+        vidaEnemigo -= danio;
+        if (vidaEnemigo <= 0)
+        {
+            //elay =true;
+            agent.isStopped = true;
+            Destroy(GetComponent<CapsuleCollider>());
+            anim.SetTrigger("died");
+
+            if (GameManager.instance != null)
+            {
+                GameManager.instance.EnemigoEliminado();
+            }
+            
+            int random = UnityEngine.Random.Range(0, 5);
+            Instantiate(GameManager.instance.ObjetosDrop[random],puntoDrop.position,Quaternion.identity);
+            StartCoroutine(DelayMuerte());
+
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Detectar cuando toca el suelo
+        if (!enSuelo && collision.gameObject.layer == LayerMask.NameToLayer("Suelo"))
+        {
+            enSuelo = true;
+
+            if (rb != null)
+            {
+                rb.isKinematic = true;
+                rb.useGravity = false;
+            }
+        }
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.DrawSphere(puntoAtaque.position, radioAtaque);
@@ -173,7 +165,6 @@ public class Enemy : MonoBehaviour, Daniable
     {
         Debug.Log("Entré a la corrutina");
         yield return new WaitForSeconds(5f);
-        //delay = false;
         Destroy(this.gameObject);
     }
 }

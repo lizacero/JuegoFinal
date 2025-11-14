@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,16 +38,14 @@ public class GameManager : MonoBehaviour
     [Header("Interacción")]
     [SerializeField] private GameObject panelInteraccion;
     public GameObject PanelInteraccion { get => panelInteraccion; set => panelInteraccion = value; }
+    [SerializeField] private GameObject panelObjetivo;
+    public GameObject PanelObjetivo { get => panelObjetivo; set => panelObjetivo = value; }
+    [SerializeField] private TextMeshProUGUI textoObjetivo;
     private bool activar = false;
     private bool ritualActivo = false;
     public bool RitualActivo { get => ritualActivo; set => ritualActivo = value; }
+    [SerializeField] private ParticleSystem particulas;
 
-    //[SerializeField] private GameObject altar;
-    //private float distancia;
-    //private float distanciaInteraccion = 3f;
-    //private bool enRango = false;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     private void Awake()
     {
@@ -67,14 +66,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        //StartCoroutine(SpawnEnemy());
-
-        //if (spawnContinuo)
-        //{
-        //    StartCoroutine(SpawnEnemyContinuo());
-        //}
-
         StartCoroutine(SpawnContinuo());
+        panelObjetivo.SetActive(true);
     }
 
     // Update is called once per frame
@@ -107,12 +100,6 @@ public class GameManager : MonoBehaviour
     {
         enemigosEliminados++;
         enemigosVivos--;
-        //Debug.Log(enemigosEliminados);
-
-        if (enemigosEliminados >= 10)
-        {
-            //menuGameplay.MostrarPanelWin();
-        }
     }
 
     private void SpawnearEnemigo()
@@ -139,12 +126,11 @@ public class GameManager : MonoBehaviour
 
     private void ObjetosRecolectados()
     {
-        //Debug.Log(items[0] + "," + items[1] + "," + items[2] + "," + items[3] + "," + items[4]);
         if (items[0] >= 1 && items[1] >= 1 && items[2] >= 1 && items[3] >= 1 && items[4] >= 1)
         {
             Debug.Log("Se han recolectado todos los cristales");
-            activar = true;
-            
+            textoObjetivo.text = "Se han recolectado todos los cristales.";
+            activar = true;  
         }
     }
 
@@ -153,13 +139,17 @@ public class GameManager : MonoBehaviour
         if (activar == true)
         {
             Debug.Log("interactuando con el altar");
+            textoObjetivo.text = "Ritual Exitoso!";
             ritualActivo = true;
+            particulas.Play();
             //interactúa con la piedra
             yield return new WaitForSeconds(10f);
+            panelObjetivo.SetActive(false);
             menuGameplay.MostrarPanelWin();
         }
         else
         {
+            panelObjetivo.SetActive(true);
             Debug.Log("Falta recolectar los cristales");
         }
     }
