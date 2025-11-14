@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour, Daniable
     [SerializeField] private float radioAtaque;
     [SerializeField] private float danioAtaque;
     private float vidaEnemigo = 20;
+    private AudioSource ataque;
     
 
     [Header("Sistema de caída")]
@@ -30,6 +31,7 @@ public class Enemy : MonoBehaviour, Daniable
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
+        ataque = GetComponent<AudioSource>();
 
         agent.enabled = false;
 
@@ -100,6 +102,7 @@ public class Enemy : MonoBehaviour, Daniable
 
     private void Atacar()  //Se llama en el evento de la animación
     {
+        ataque.Play();
         Collider[] colliderTocados = Physics.OverlapSphere(puntoAtaque.position, radioAtaque);
         foreach (Collider coll in colliderTocados)
         {

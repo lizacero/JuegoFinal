@@ -6,9 +6,7 @@ public class Interactuable : MonoBehaviour
 {
     [SerializeField] private InputManagerSO inputManager;
     [SerializeField] private GameObject player;
-    //[SerializeField] private GameObject ritualEffect;
-    //[SerializeField] private GameObject panelVictoria;
-    //[SerializeField] private TextMeshProUGUI interaccionText;
+
 
     private bool enRango = false;
     private float distancia;
@@ -56,8 +54,6 @@ public class Interactuable : MonoBehaviour
         {
             StartCoroutine(GameManager.instance.ActivarRitual());
         }
-
-
         
     }
 

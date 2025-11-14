@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour
     private bool ritualActivo = false;
     public bool RitualActivo { get => ritualActivo; set => ritualActivo = value; }
     [SerializeField] private ParticleSystem particulas;
+    [SerializeField] private AudioSource portal;
 
 
     private void Awake()
@@ -142,6 +143,7 @@ public class GameManager : MonoBehaviour
             textoObjetivo.text = "Ritual Exitoso!";
             ritualActivo = true;
             particulas.Play();
+            portal.Play();
             //interactúa con la piedra
             yield return new WaitForSeconds(10f);
             panelObjetivo.SetActive(false);
