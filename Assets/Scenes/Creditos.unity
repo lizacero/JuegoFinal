@@ -1286,10 +1286,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "JUEGO FINAL\n\nACTIVIDAD 2\nDESARROLLO DE VIDEOJUEGOS II\n\nMASTER EN
-    DISE\xD1O Y DESARROLLO DE VIDEOJUEGOS\n\nBASADO EN EL TEMARIO\n\nDISE\xD1O\nDANIELA
-    LIZETH ACERO HERRERA\n\nDESARROLLO\nDANIELA LIZETH ACERO HERRERA\n\nASSETS\n1\n2\n3\n4\n5\n6\n\nAUDIO\n\n\n\n\n\nGRACIAS
-    POR JUGAR"
+  m_text: "JUEGO FINAL\n\nInvasion: Crystal Protocol\n\n\nACTIVIDAD 2\nDESARROLLO
+    DE VIDEOJUEGOS II\n\nMASTER EN DISE\xD1O Y DESARROLLO DE VIDEOJUEGOS\n\nBASADO
+    EN EL TEMARIO\n\nDISE\xD1O\nDANIELA LIZETH ACERO HERRERA\n\nDESARROLLO\nDANIELA
+    LIZETH ACERO HERRERA\n\nASSETS\nObtenidos en la AssetStore\n\nAUDIO\nDescargados
+    de Freesound\n\n\n\n\n\nGRACIAS POR JUGAR"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

@@ -83,11 +83,9 @@ public class Enemy : MonoBehaviour, Daniable
         anim.SetBool("walking", true);
         agent.SetDestination(target.transform.position);
 
-        // Verificar que el agente tenga un path válido y no esté calculando uno nuevo
         if (agent.pathPending)
-            return; // Esperar a que termine de calcular el path
+            return;
 
-        // Verificar que tenga un path válido
         if (!agent.hasPath)
             return;
 
