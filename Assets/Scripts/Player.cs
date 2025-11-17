@@ -28,6 +28,7 @@ public class Player : MonoBehaviour, Daniable
 
     private bool mouseSobreUI = false;
 
+    //Se suscribe a los eventos de input (mover, disparar, recargar) al habilitar el jugador.
     private void OnEnable()
     {
         inputManager.OnMover += Mover;
@@ -35,9 +36,9 @@ public class Player : MonoBehaviour, Daniable
         inputManager.OnRecargar += Recargar;
     }
 
+    //Cancela las suscripciones de input cuando el jugador se deshabilita o destruye.
     private void OnDisable()
     {
-        // Desuscribirse de los eventos antes de que se destruya el objeto
         if (inputManager != null)
         {
             inputManager.OnMover -= Mover;
@@ -46,6 +47,7 @@ public class Player : MonoBehaviour, Daniable
         }
     }
 
+    //Habilita animaciones por defecto e inicializa la vida en el HUD.
     void Start()
     {
         
@@ -60,9 +62,9 @@ public class Player : MonoBehaviour, Daniable
         }
     }
 
+    //Comprueba si el mouse está sobre UI, aplica gravedad y procesa movimiento.
     void Update()
     {
-        // Verificar el estado de UI en Update() (se ejecuta antes de los callbacks)
         if (EventSystem.current != null)
         {
             mouseSobreUI = EventSystem.current.IsPointerOverGameObject();
@@ -73,13 +75,14 @@ public class Player : MonoBehaviour, Daniable
         
     }
 
-
+    //Recibe el vector 2D del input y lo guarda como dirección deseada.
     private void Mover(Vector2 ctx)
     {
         direccionInput = new Vector3(ctx.x,0,ctx.y);
         //Debug.Log(direccionInput);
     }
 
+    // Dispara si no está sobre UI ni en pausa. Activa animación, partículas, audio y raycast.
     private void Disparar()
     {
         if (mouseSobreUI)
@@ -91,7 +94,6 @@ public class Player : MonoBehaviour, Daniable
         {
             return; // Si está pausado, no disparar
         }
-
 
         Debug.Log("Disparando");
         anim.SetTrigger("shooting");
@@ -109,20 +111,21 @@ public class Player : MonoBehaviour, Daniable
         }
     }
 
-
+    // Lanza la animación de recarga.
     private void Recargar()
     {
         Debug.Log("Recargando");
         anim.SetTrigger("reloading");
     }
 
-
+    //Simula gravedad acumulando velocidad vertical y moviendo el CharacterController.
     private void AplicarGravedad()
     {
         velocidadVertical.y += factorGravedad * Time.deltaTime;
         controller.Move(velocidadVertical*Time.deltaTime);
     }
 
+    //Calcula la dirección de movimiento según la cámara, mueve al jugador y actualiza animaciones.
     private void Moviendo()
     {
         Vector3 direccionFrente = camara.forward;
@@ -150,12 +153,14 @@ public class Player : MonoBehaviour, Daniable
         Debug.DrawRay(camara.position, camara.forward * distanciaDisparo, Color.yellow);
     }
 
+    //Rota al jugador hacia la dirección indicada.
     private void RotarHaciaDestino(Vector3 destino)
     {
         Quaternion rot = Quaternion.LookRotation(destino);
         transform.rotation = rot;
     }
 
+    // Reduce la vida, actualiza el GameManager y verifica la muerte del jugador.
     public void RecibirDanio(float danio)
     {
         
@@ -168,6 +173,7 @@ public class Player : MonoBehaviour, Daniable
         }
     }
 
+    //Detecta colisiones del CharacterController con ítems y los registra en el GameManager.
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (hit.gameObject.CompareTag("Item1"))
@@ -197,6 +203,5 @@ public class Player : MonoBehaviour, Daniable
         }
 
     }
-
 
 }

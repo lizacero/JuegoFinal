@@ -14,11 +14,13 @@ public class MenuGameplay : MonoBehaviour
     [SerializeField] private GameObject panelPausa;
     private bool pausado = false;
 
+    //Se suscribe al evento Esc del input manager cuando el menú entra en escena.
     private void OnEnable()
     {
         inputManager.OnEsc += Esc;
     }
 
+    //Cancela la suscripción al evento Esc al deshabilitar el menú.
     private void OnDisable()
     {
         if (inputManager != null)
@@ -26,9 +28,10 @@ public class MenuGameplay : MonoBehaviour
             inputManager.OnEsc -= Esc;
         }
     }
+
+    //Se asegura que todos los paneles estén desactivados al cargar la escena.
     void Start()
     {
-        // Asegurarse de que los paneles estén desactivados al inicio
         if (panelWin != null)
             panelWin.SetActive(false);
         if (panelLose != null)
@@ -37,6 +40,7 @@ public class MenuGameplay : MonoBehaviour
             panelPausa.SetActive(false);
     }
 
+    //Alterna el panel de pausa, cursor, audio y timeScale al presionar Esc.
     private void Esc()
     {
         if (panelPausa != null)
@@ -62,6 +66,7 @@ public class MenuGameplay : MonoBehaviour
         }
     }
 
+    //Muestra el panel de victoria, muestra el cursor y congela el juego.
     public void MostrarPanelWin()
     {
         if (panelWin != null)
@@ -74,6 +79,7 @@ public class MenuGameplay : MonoBehaviour
         }
     }
 
+    //Muestra el panel de derrota, muestra el cursor y congela el juego.
     public void MostrarPanelLose()
     {
         if (panelLose != null)
@@ -86,12 +92,14 @@ public class MenuGameplay : MonoBehaviour
         }
     }
 
+    //Vuelve al menú principal restableciendo audio y timeScale.
     public void Volver()
     {
         SceneManager.LoadScene(0);
         AudioListener.pause = false;
     }
 
+    //Recarga la escena de gameplay con el juego en tiempo normal.
     public void Reintentar()
     {
         AudioListener.pause = false;
@@ -99,12 +107,14 @@ public class MenuGameplay : MonoBehaviour
         Time.timeScale = 1;
     }
 
+    //Cierra la aplicación del juego.
     public void Salir()
     {
         Debug.Log("Saliendo");
         Application.Quit();
     }
 
+    //Reanuda el gameplay escondiendo el panel de pausa y bloqueando el cursor.
     public void Continuar()
     {
         panelPausa.SetActive(false);
@@ -114,6 +124,7 @@ public class MenuGameplay : MonoBehaviour
         Time.timeScale = 1;
     }
 
+    //Carga la escena de créditos asegurando que audio y tiempo estén activos.
     public void Creditos()
     {
         SceneManager.LoadScene(2);

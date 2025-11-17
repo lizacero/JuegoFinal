@@ -21,8 +21,6 @@ public class GameManager : MonoBehaviour
     private bool spawnContinuo = true;
     private int maxEnemigos = 20;
     private int enemigosVivos = 0;
-    private int enemigosEliminados = 0;
-    public int EnemigosEliminados { get => enemigosEliminados; set => enemigosEliminados = value; }
 
     [Header("HUD")]
     [SerializeField] private MenuGameplay menuGameplay;
@@ -49,7 +47,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ParticleSystem particulas;
     [SerializeField] private AudioSource portal;
 
-
+    //Asegura el estado del cursor y timeScale.
     private void Awake()
     {
         Time.timeScale = 1;
@@ -63,17 +61,16 @@ public class GameManager : MonoBehaviour
         {
             player = FindAnyObjectByType<Player>();
         }
-
-        enemigosEliminados = 0;
     }
 
+    //Arranca la corrutina de spawn continuo y muestra el panel de objetivo inicial.
     void Start()
     {
         StartCoroutine(SpawnContinuo());
         panelObjetivo.SetActive(true);
     }
 
-    // Update is called once per frame
+    //Sincroniza el slider de vida, detecta la derrota y evalúa el estado de los ítems recolectados.
     void Update()
     {
 
@@ -86,6 +83,7 @@ public class GameManager : MonoBehaviour
 
     }
 
+    //Configura los valores base de la vida del jugador y actualiza el slider del HUD.
     public void InicializarVida(float vidaInicial)
     {
         vidaPlayer = vidaInicial;
@@ -99,19 +97,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //Actualiza el número de enemigos vivos en juego.
     public void EnemigoEliminado()
     {
-        enemigosEliminados++;
         enemigosVivos--;
     }
 
+    //Instancia un enemigo en el punto de spawn y actualiza el contador de vivos.
     private void SpawnearEnemigo()
     {
         Instantiate(enemy, puntoSpawnEnemy.position, puntoSpawnEnemy.rotation);
         enemigosVivos++;
     }
 
-
+    //Corrutina que genera enemigos periódicamente mientras no se alcance el máximo configurado.
     private IEnumerator SpawnContinuo()
     {
         yield return new WaitForSeconds(3f);
@@ -123,9 +122,9 @@ public class GameManager : MonoBehaviour
             }
             yield return new WaitForSeconds(tiempoEntreSpawn);
         }
-
     }
 
+    //Comprueba si se reunieron los cinco cristales y habilita el estado para activar el ritual.
     private void ObjetosRecolectados()
     {
         if (items[0] >= 1 && items[1] >= 1 && items[2] >= 1 && items[3] >= 1 && items[4] >= 1)
@@ -136,6 +135,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //Corrutina que ejecuta la secuencia del ritual si ya se reunieron los cristales. Activa el win al completarse.
     public IEnumerator ActivarRitual()
     {
         if (activar == true)

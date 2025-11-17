@@ -7,29 +7,23 @@ public class Interactuable : MonoBehaviour
     [SerializeField] private InputManagerSO inputManager;
     [SerializeField] private GameObject player;
 
-
     private bool enRango = false;
     private float distancia;
     [SerializeField] private float distanciaInteraccion = 8f;
 
+    //Se suscribe al evento de interacción al habilitar el objeto.
     private void OnEnable()
     {
         inputManager.OnInteractuar += Interactuar;
     }
 
+    //Cancela la suscripción al evento de interacción al deshabilitar el objeto.
     private void OnDisable()
     {
         inputManager.OnInteractuar -= Interactuar;
     }
 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
+    // Calcula cada frame la distancia al jugador, muestra u oculta el panel de interacción y determina si está dentro del rango permitido.
     void Update()
     {
         distancia = Vector3.Distance(player.transform.position, this.transform.position);
@@ -47,6 +41,8 @@ public class Interactuable : MonoBehaviour
             enRango = false;
         }
     }
+
+    // Ejecuta la lógica de interacción cuando el jugador pulsa E dentro del rango. Inicia el ritual si aún no está activo.
     private void Interactuar()
     {
 
@@ -57,6 +53,7 @@ public class Interactuable : MonoBehaviour
         
     }
 
+    // Marca que el jugador ha entrado en el trigger del objeto interactuable.
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject == player)
@@ -64,6 +61,8 @@ public class Interactuable : MonoBehaviour
             enRango = true;
         }
     }
+
+    // Marca la salida del jugador del trigger y oculta el panel de interacción.
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject == player)

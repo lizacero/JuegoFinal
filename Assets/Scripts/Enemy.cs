@@ -19,7 +19,6 @@ public class Enemy : MonoBehaviour, Daniable
     [SerializeField] private float radioAtaque;
     [SerializeField] private float danioAtaque;
     private float vidaEnemigo = 60;
-    //private AudioSource ataque;
     [SerializeField] private AudioSource respiracion;
     [SerializeField] private AudioSource ataque;
     private float distanciaReal;
@@ -28,13 +27,13 @@ public class Enemy : MonoBehaviour, Daniable
     [Header("Sistema de caída")]
     private bool enSuelo = false;
     private bool haIniciadoBusqueda = false;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    //Prepara el agente para la caída inicial y busca al jugador disponible
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-        //ataque = GetComponent<AudioSource>();
 
         agent.enabled = false;
 
@@ -47,7 +46,7 @@ public class Enemy : MonoBehaviour, Daniable
         target = FindAnyObjectByType<Player>();
     }
 
-    // Update is called once per frame
+    //Supervisa si el enemigo ya tocó suelo para perseguir al jugador.
     void Update()
     {
 
@@ -59,9 +58,10 @@ public class Enemy : MonoBehaviour, Daniable
         {
             PerseguirPlayer();
         }
-        Debug.Log("Distancia real" + distanciaReal);
+        //Debug.Log("Distancia real" + distanciaReal);
     }
 
+    // Activa el NavMeshAgent y fija como destino al jugador una vez que el enemigo aterriza.
     private void IniciarBusqueda()
     {
         if (target == null)
@@ -76,6 +76,7 @@ public class Enemy : MonoBehaviour, Daniable
         }
     }
 
+    //Avanza hacia el jugador mientras exista un path válido y decide cuándo pasar al modo ataque.
     private void PerseguirPlayer()
     {
         if (target == null || !agent.enabled) return;
@@ -98,6 +99,7 @@ public class Enemy : MonoBehaviour, Daniable
         }
     }
 
+    //Gira al enemigo para mirar al jugador manteniendo el eje vertical estabilizado.
     private void EnfocarOnjetivo()
     {
         Vector3 direccionAObjetivo = (target.transform.position - transform.position).normalized;
@@ -106,12 +108,14 @@ public class Enemy : MonoBehaviour, Daniable
         transform.rotation = rotacionAObjetivo;
     }
 
+    //Detiene el desplazamiento y activa la animación de ataque cuando está en rango.
     private void LanzarAtaque()
     {
         agent.isStopped = true;
         anim.SetBool("attacking", true);
     }
 
+    //Reproduce el sonido y aplica daño al jugador dentro del radio de golpe.
     private void Atacar()  //Se llama en el evento de la animación
     {
         ataque.Play();
@@ -128,18 +132,19 @@ public class Enemy : MonoBehaviour, Daniable
         }
     }
 
+    //Reanuda el movimiento del agente y sale del estado de ataque.
     private void FinDeAtaque()  //Se llama en el evento de la animación
     {
         agent.isStopped = false;
         anim.SetBool("attacking", false);
     }
 
+    //Resta vida, lanza la secuencia de muerte al llegar a cero y genera el drop correspondiente.
     public void RecibirDanio(float danio)
     {
         vidaEnemigo -= danio;
         if (vidaEnemigo <= 0)
         {
-            //elay =true;
             agent.isStopped = true;
             Destroy(GetComponent<CapsuleCollider>());
             anim.SetTrigger("died");
@@ -156,9 +161,9 @@ public class Enemy : MonoBehaviour, Daniable
         }
     }
 
+    //Detecta el contacto con el suelo para desactivar la física y habilitar el NavMeshAgent.
     private void OnCollisionEnter(Collision collision)
     {
-        // Detectar cuando toca el suelo
         if (!enSuelo && collision.gameObject.layer == LayerMask.NameToLayer("Suelo"))
         {
             enSuelo = true;
@@ -171,15 +176,17 @@ public class Enemy : MonoBehaviour, Daniable
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawSphere(puntoAtaque.position, radioAtaque);
-    }
-
+    //Corrutina que espera un tiempo antes de destruir el enemigo.
     private IEnumerator DelayMuerte()
     {
         Debug.Log("Entré a la corrutina");
         yield return new WaitForSeconds(5f);
         Destroy(this.gameObject);
+    }
+
+    //Detecta el contacto con el suelo para desactivar la física y habilitar el NavMeshAgent.
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawSphere(puntoAtaque.position, radioAtaque);
     }
 }

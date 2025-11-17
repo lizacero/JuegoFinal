@@ -3,18 +3,12 @@ using UnityEngine;
 
 public class Destruir : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // Inicia la corrutina que destruye el objeto.
     void Start()
     {
         StartCoroutine(DestruirObjeto());
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    //Corrutina que espera un tiempo para destruir al objeto.
     private IEnumerator DestruirObjeto()
     {
         yield return new WaitForSeconds(10f);

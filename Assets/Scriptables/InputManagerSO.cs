@@ -12,6 +12,8 @@ public class InputManagerSO : ScriptableObject
     public event Action OnInteractuar;
     public event Action OnEsc;
 
+    //Crea y configura las entradas cuando el ScriptableObject se habilita.
+    //Suscribe los eventos del mapa de controladores a los eventos públicos.
     private void OnEnable()
     {
         misControles = new Controls();
@@ -24,6 +26,7 @@ public class InputManagerSO : ScriptableObject
         misControles.Gameplay.Esc.started += Esc;
     }
 
+    //Los siguientes métodos notifican a los oyentes los diferentes eventos al detectar la entrada correspondiente.
     private void Esc(InputAction.CallbackContext context)
     {
         OnEsc?.Invoke();
